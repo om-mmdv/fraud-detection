@@ -47,19 +47,33 @@ predicting "normal" gives 99.83%.
 
 
 
-Lowering the threshold from 0.5 to 0.08 caught 3 more frauds (85 vs 82)
+The threshold was chosen with 5-fold stratified cross-validation on the
 
-at the price of 8 more false alarms, raising the net benefit by about 27%
+training set only (out-of-fold scores), then applied once to the test set.
 
-(assuming a false alarm costs $10; the conclusion held for $1 and $5).
+
+
+| Threshold | Caught | False alarms | Recall | Precision | Net benefit |
+
+|---|---|---|---|---|---|
+
+| 0.5 (default) | 82 | 6 | 0.837 | 0.932 | $6,863 |
+
+| \*\*0.04 (CV-chosen)\*\* | \*\*86\*\* | 19 | 0.878 | 0.819 | \*\*$8,720\*\* |
+
+
+
+Lowering the threshold raised the net benefit by about 27% (assuming a false
+
+alarm costs $10). Cross-validated PR-AUC is 0.855 ± 0.024 and test PR-AUC is
+
+0.882, so the model is not overfitted to the test set.
 
 
 
 !\[Net benefit](assets/net\_benefit.png)
 
-
-
-\## Supervised vs unsupervised
+## Supervised vs unsupervised
 
 
 
@@ -141,10 +155,6 @@ python -m src.export\_scores
 
 \- Only 98 frauds in the test set: metrics are noisy (one case = 1 pp of recall).
 
-\- The threshold was tuned on the same test set, so the benefit is optimistic;
-
-&#x20; a separate validation split would be more correct.
-
 \- The false alarm cost ($10) is an assumption; "saved" assumes the full amount
 
 &#x20; of a caught transaction is recovered.
@@ -154,4 +164,7 @@ python -m src.export\_scores
 \- `Time` was dropped; hour-of-day patterns are approximate.
 
 \- Early stopping was disabled for boosting; the unweighted model overfits.
+- Differences of 2-3 points in PR-AUC are within the fold-to-fold spread
+
+&#x20; (± 0.024), so they should not be read as real improvements.
 

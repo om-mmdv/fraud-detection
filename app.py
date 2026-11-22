@@ -48,7 +48,7 @@ scores = (df["supervised_score"] if is_supervised
 
 # For the unsupervised model, the threshold is a percentile of suspiciousness
 if is_supervised:
-    threshold = st.sidebar.slider("Probability threshold", 0.01, 0.99, 0.08, 0.01)
+    threshold = st.sidebar.slider("Probability threshold", 0.01, 0.99, 0.04, 0.01)
 else:
     top_share = st.sidebar.slider("Review the top % of transactions", 0.1, 10.0, 1.0, 0.1)
     threshold = np.quantile(scores, 1 - top_share / 100)
@@ -100,6 +100,7 @@ fig.update_layout(height=340, paper_bgcolor="rgba(0,0,0,0)",
                   margin=dict(l=10, r=10, t=20, b=10))
 st.plotly_chart(fig, use_container_width=True)
 
-st.info("The threshold was tuned on the same data the metrics are computed on, "
-        "and the test set contains only 98 frauds, so the numbers are noisy "
-        "and optimistic. The false alarm cost is an assumption.")
+st.info("Metrics are computed on the test set (98 frauds), so they are noisy. "
+        "The recommended threshold (0.04) was chosen on cross-validated "
+        "training data, but moving the slider here tunes on the test set. "
+        "The false alarm cost is an assumption.")

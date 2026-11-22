@@ -77,17 +77,37 @@ alarm costs $10). Cross-validated PR-AUC is 0.855 ± 0.024 and test PR-AUC is
 
 
 
-Isolation Forest never sees labels (PR-AUC 0.174, ROC-AUC 0.954). If analysts
-
-review only the top 0.5% of transactions, it finds 47% of frauds versus 91%
-
-for the supervised model; at 5% it finds 86% versus 93%.
+Five unsupervised detectors were compared (no labels used for fitting):
 
 
 
-!\[Anomaly scores](assets/anomaly\_scores.png)
+| Method | PR-AUC | ROC-AUC | Frauds in top 0.5% | Frauds in top 5% |
+
+|---|---|---|---|---|
+
+| Isolation Forest | 0.174 | 0.954 | 46.9% | 85.7% |
+
+| Isolation Forest (log-amount, scaled) | 0.194 | 0.954 | 46.9% | 83.7% |
+
+| Local Outlier Factor | 0.039 | 0.867 | 14.3% | 54.1% |
+
+| PCA reconstruction error | 0.180 | 0.958 | 50.0% | 88.8% |
+
+| Mahalanobis distance | 0.175 | 0.959 | 49.0% | 87.8% |
+
+| \*\*Supervised boosting\*\* | \*\*0.882\*\* | \*\*0.980\*\* | \*\*90.8%\*\* | \*\*92.9%\*\* |
 
 
+
+All unsupervised methods hit the same ceiling: they rank transactions by how
+
+unusual they are, not by how fraudulent they are, and many legitimate
+
+transactions are unusual. The differences among the four best are within
+
+noise (98 frauds in the test set). Labels roughly double the frauds found when
+
+analysts review only the top 0.5% of transactions.
 
 \## Dashboard
 

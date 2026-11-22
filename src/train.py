@@ -53,11 +53,12 @@ def main():
             LogisticRegression(class_weight="balanced", max_iter=1000,
                                random_state=RANDOM_STATE)),
         "Boosting (no weights)": HistGradientBoostingClassifier(
-            max_iter=300, learning_rate=0.05, random_state=RANDOM_STATE),
+            max_iter=300, learning_rate=0.05, early_stopping=False,
+            random_state=RANDOM_STATE),
         "Boosting (soft weights)": HistGradientBoostingClassifier(
-            max_iter=300, learning_rate=0.05, random_state=RANDOM_STATE),
+            max_iter=300, learning_rate=0.05, early_stopping=False,
+            random_state=RANDOM_STATE),
     }
-
     best_name, best_pr, best_model = None, -1, None
     for name, model in models.items():
         if name == "Boosting (soft weights)":
